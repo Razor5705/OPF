@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestigaIA - Generador de Prompts para Investigadores</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="detective-icon">🕵‍♂</div>
+            <h1 class="logo">InvestigaIA</h1>
+            <p class="subtitle">Generador de Prompts Especializados para Investigadores Privados</p>
+        </div>
+
+        <form id="promptForm">
+            <div class="form-group">
+                <label for="role">Rol del Investigador</label>
+                <select id="role" required>
+                    <option value="">Seleccione un rol</option>
+                    <option value="Investigador privado general">Investigador privado general</option>
+                    <option value="Detective corporativo">Detective corporativo</option>
+                    <option value="Investigador forense digital">Investigador forense digital</option>
+                    <option value="Analista de inteligencia">Analista de inteligencia</option>
+                    <option value="Investigador de seguros">Investigador de seguros</option>
+                    <option value="Especialista en debido diligencia">Especialista en debido diligencia</option>
+                    <option value="Investigador de fraudes">Investigador de fraudes</option>
+                    <option value="Analista de riesgos">Analista de riesgos</option>
+                    <option value="Investigador académico criminalístico">Investigador académico criminalístico</option>
+                    <option value="Becario/Asistente de investigación">Becario/Asistente de investigación</option>
+                    <option value="Perito especializado">Perito especializado</option>
+                    <option value="Investigador de antecedentes">Investigador de antecedentes</option>
+                    <option value="Especialista en ciberseguridad investigativa">Especialista en ciberseguridad investigativa</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="context">Contexto: Caso o situación específica</label>
+                <textarea id="context" placeholder="Describe brevemente el caso, situación o contexto de la investigación..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="activity">Tipo de Actividad</label>
+                <select id="activity" required>
+                    <option value="">Seleccione una actividad</option>
+                    <option value="Investigación judicial/legal">Investigación judicial/legal</option>
+                    <option value="Investigación corporativa">Investigación corporativa</option>
+                    <option value="Verificación de información/fake news">Verificación de información/fake news</option>
+                    <option value="Análisis forense digital">Análisis forense digital</option>
+                    <option value="Investigación de fraudes">Investigación de fraudes</option>
+                    <option value="Due diligence empresarial">Due diligence empresarial</option>
+                    <option value="Investigación de antecedentes">Investigación de antecedentes</option>
+                    <option value="Análisis de riesgos">Análisis de riesgos</option>
+                    <option value="Investigación académica criminológica">Investigación académica criminológica</option>
+                    <option value="Recopilación de evidencias">Recopilación de evidencias</option>
+                    <option value="Análisis de patrones y comportamientos">Análisis de patrones y comportamientos</option>
+                    <option value="Investigación de mercado competitivo">Investigación de mercado competitivo</option>
+                    <option value="Contrainteligencia">Contrainteligencia</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="format">Formato de Salida</label>
+                <select id="format" required>
+                    <option value="">Seleccione un formato</option>
+                    <option value="Informe ejecutivo estructurado">Informe ejecutivo estructurado</option>
+                    <option value="Cronología de eventos/timeline">Cronología de eventos/timeline</option>
+                    <option value="Mapa de conexiones y relaciones">Mapa de conexiones y relaciones</option>
+                    <option value="Lista de evidencias catalogadas">Lista de evidencias catalogadas</option>
+                    <option value="Protocolo de investigación paso a paso">Protocolo de investigación paso a paso</option>
+                    <option value="Matriz de análisis de riesgos">Matriz de análisis de riesgos</option>
+                    <option value="Cuestionario de entrevista">Cuestionario de entrevista</option>
+                    <option value="Checklist de verificación">Checklist de verificación</option>
+                    <option value="Diagrama de flujo investigativo">Diagrama de flujo investigativo</option>
+                    <option value="Reporte de hallazgos preliminares">Reporte de hallazgos preliminares</option>
+                    <option value="Plan de seguimiento y monitoreo">Plan de seguimiento y monitoreo</option>
+                    <option value="Análisis OSINT estructurado">Análisis OSINT estructurado</option>
+                    <option value="Marco legal y consideraciones éticas">Marco legal y consideraciones éticas</option>
+                    <option value="Plantilla de documentación de evidencias">Plantilla de documentación de evidencias</option>
+                    <option value="Guía de preservación de cadena de custodia">Guía de preservación de cadena de custodia</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="competency">Competencia General</label>
+                <select id="competency" required>
+                    <option value="">Seleccione una competencia</option>
+                    <option value="Pensamiento analítico y deductivo">Pensamiento analítico y deductivo</option>
+                    <option value="Investigación con fuentes abiertas (OSINT)">Investigación con fuentes abiertas (OSINT)</option>
+                    <option value="Ética profesional e integridad">Ética profesional e integridad</option>
+                    <option value="Análisis forense y evidencial">Análisis forense y evidencial</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="restrictions">Restricciones o Criterios Adicionales</label>
+                <textarea id="restrictions" placeholder="Especifique limitaciones, consideraciones legales, plazos, recursos disponibles, etc..."></textarea>
+            </div>
+
+            <button type="submit" class="generate-btn">🔍 Generar Prompt Investigativo</button>
+        </form>
+
+        <div id="resultSection" class="result-section">
+            <div class="result-header">
+                <span class="result-title">📋 Prompt Generado:</span>
+                <button id="copyBtn" class="copy-btn">📋 Copiar</button>
+            </div>
+            <div id="generatedPrompt" class="generated-prompt"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
