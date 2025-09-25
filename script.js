@@ -6,45 +6,54 @@ document.getElementById('promptForm').addEventListener('submit', function(e) {
     const activity = document.getElementById('activity').value;
     const format = document.getElementById('format').value;
     const competency = document.getElementById('competency').value;
+    const style = document.getElementById('style').value;
     const restrictions = document.getElementById('restrictions').value;
     
-    if (!role || !activity || !format || !competency) {
+    // Validación de campos obligatorios
+    if (!role || !activity || !format || !competency || !style) {
         alert('Por favor, completa todos los campos obligatorios.');
         return;
     }
     
-    let prompt = `Actúa como un ${role} experto con especialización en ${competency.toLowerCase()}.
+    // Generar el prompt mejorado según las especificaciones
+    let prompt = `PROMPT INDAGATORIO DE OPF DETECTIVES ANALISTAS
 
-CONTEXTO DE LA INVESTIGACIÓN:
+ROL DEL INVESTIGADOR: ${role}
+
+CONTEXTO DETALLADO DEL CASO:
 ${context || 'No especificado'}
 
-TAREA PRINCIPAL:
-Necesito que desarrolles una ${activity.toLowerCase()} y me proporciones el resultado en formato de ${format.toLowerCase()}.
+ACTIVIDAD PRIORITARIA A REALIZAR: ${activity}
 
-COMPETENCIA CLAVE A APLICAR:
-Enfócate especialmente en aplicar tu expertise en ${competency.toLowerCase()} para abordar esta investigación de manera profesional y efectiva.
+FORMATO DE SALIDA REQUERIDO: ${format}
 
-FORMATO REQUERIDO:
-Estructura tu respuesta como ${format.toLowerCase()}, asegurándote de que sea clara, profesional y utilizable en un contexto investigativo real.`;
+COMPETENCIA GENERAL A APLICAR: ${competency}
+
+ESTILO DE INVESTIGACIÓN: ${style}`;
 
     if (restrictions) {
         prompt += `
 
-RESTRICCIONES Y CONSIDERACIONES:
+RESTRICCIONES Y CRITERIOS ADICIONALES:
 ${restrictions}`;
     }
 
     prompt += `
 
-INSTRUCCIONES ADICIONALES:
-- Mantén la confidencialidad y ética profesional en todo momento
-- Basa tus recomendaciones en mejores prácticas del sector
-- Considera aspectos legales y regulatorios aplicables
-- Proporciona información práctica y accionable
-- Si requieres información adicional, especifica qué datos necesitas
+INSTRUCCIONES ESPECÍFICAS PARA LA INVESTIGACIÓN:
+- Desarrollar una investigación completa y profesional basada en el contexto proporcionado
+- Aplicar metodologías específicas para ${activity}
+- Priorizar el enfoque de ${style} en todo el proceso
+- Garantizar que el formato de salida sea ${format} con estructura clara y profesional
+- Incluir timeline de eventos, vínculos entre elementos y pistas accionables
+- Basar todas las conclusiones en evidencias verificables y citables
+- Considerar el marco legal y ético aplicable al caso
+- Proporcionar recomendaciones prácticas y ejecutables
+- Mantener la confidencialidad y ética profesional en todo momento
 
-Por favor, procede con la ${activity.toLowerCase()} siguiendo estos parámetros.`;
+Por favor, proceda con la investigación siguiendo estos parámetros y entregue el resultado en el formato solicitado.`;
     
+    // Mostrar el resultado
     document.getElementById('generatedPrompt').textContent = prompt;
     document.getElementById('resultSection').style.display = 'block';
     
@@ -61,15 +70,11 @@ document.getElementById('copyBtn').addEventListener('click', function() {
         const btn = document.getElementById('copyBtn');
         const originalText = btn.textContent;
         btn.textContent = '✅ Copiado!';
-        btn.style.background = 'rgba(0, 255, 0, 0.3)';
-        btn.style.borderColor = '#00ff00';
-        btn.style.color = '#00ff00';
+        btn.style.backgroundColor = '#2ecc71';
         
         setTimeout(function() {
             btn.textContent = originalText;
-            btn.style.background = 'rgba(255, 215, 0, 0.2)';
-            btn.style.borderColor = '#ffd700';
-            btn.style.color = '#ffd700';
+            btn.style.backgroundColor = '#27ae60';
         }, 2000);
     }).catch(function() {
         alert('No se pudo copiar al portapapeles. Por favor, selecciona y copia manualmente.');
