@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InvestigaIA - Generador de Prompts para Investigadores</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="detective-icon">🕵‍♂</div>
-            <h1 class="logo">InvestigaIA</h1>
+            <div class="logotipo">
+                <img src="OPF sin fondo (2).png" alt="logotipo">
+            </div>
+            <h1 class="logo">InvestigaOPF</h1>
             <p class="subtitle">Generador de Prompts Especializados para Investigadores Privados</p>
         </div>
 
@@ -19,25 +22,37 @@
                 <label for="role">Rol del Investigador</label>
                 <select id="role" required>
                     <option value="">Seleccione un rol</option>
-                    <option value="Investigador privado general">Investigador privado general</option>
-                    <option value="Detective corporativo">Detective corporativo</option>
-                    <option value="Investigador forense digital">Investigador forense digital</option>
-                    <option value="Analista de inteligencia">Analista de inteligencia</option>
-                    <option value="Investigador de seguros">Investigador de seguros</option>
-                    <option value="Especialista en debido diligencia">Especialista en debido diligencia</option>
-                    <option value="Investigador de fraudes">Investigador de fraudes</option>
-                    <option value="Analista de riesgos">Analista de riesgos</option>
-                    <option value="Investigador académico criminalístico">Investigador académico criminalístico</option>
-                    <option value="Becario/Asistente de investigación">Becario/Asistente de investigación</option>
-                    <option value="Perito especializado">Perito especializado</option>
-                    <option value="Investigador de antecedentes">Investigador de antecedentes</option>
-                    <option value="Especialista en ciberseguridad investigativa">Especialista en ciberseguridad investigativa</option>
-                </select>
+                    <option value="DETECTIVE PRIVADO">DETECTIVE PRIVADO</option>
+                    <option value="INVESTIGACION EMPRESARIAL">INVESTIGACION EMPRESARIAL</option>
+                    <option value="INVESTIGACION FORENSE">INVESTIGACION FORENSE</option>
+                    <option value="INVESTIGACIÓN DIGITAL">INVESTIGACIÓN DIGITAL</option>
+                    <option value="ANALISTA DE INTELIGENCIA">ANALISTA DE INTELIGENCIA</option>
+                    <option value="DILIGENCIA DEBIDA">DILIGENCIA DEBIDA</option>
+                    <option value="INVESTIGANDO FRAUDES Y ESTAFAS">INVESTIGANDO FRAUDES Y ESTAFAS</option>
+                    <option value="INVESTIGANDO RIESGOS">INVESTIGANDO RIESGOS</option>
+                    <option value="INVESTIGACION ACADEMICA Y CRIMINALISTICA">INVESTIGACION ACADEMICA Y CRIMINALISTICA</option>
+                    <option value="LOCALIZACION DE PERSONAS Y ACTIVOS">LOCALIZACION DE PERSONAS Y ACTIVOS</option>
+                    <option value="INVESTIGACION FAMILIAR">INVESTIGACION FAMILIAR</option>
+                    <option value="INVESTIGACIONES PATRIMONIALES Y FINANCIERAS">INVESTIGACIONES PATRIMONIALES Y FINANCIERAS</option>
+                    <option value="PERICIALES Y FORENSE">PERICIALES Y FORENSE</option>
+                    <option value="SINIESTROS, ACCIDENTES Y BAJAS">SINIESTROS, ACCIDENTES Y BAJAS</option>
+                    <option value="SEGURIDAD CORPORATIVA Y REPUTACIONAL">SEGURIDAD CORPORATIVA Y REPUTACIONAL</option>
+                    <option value="INVESTIGACIÓN ASEGURADORA">INVESTIGACIÓN ASEGURADORA</option>
+                    <option value="APOYO AL LITIGIO Y LETRADOS">APOYO AL LITIGIO Y LETRADOS</option>
+                    <option value="INVESTIGACION HERENCIAS Y LOCALIZACION ANTEPASADOS">INVESTIGACION HERENCIAS Y LOCALIZACION ANTEPASADOS</option>
+                    <option value="CIBERINVESTIGACION">CIBERINVESTIGACION</option>
+                  </select>
+                  
             </div>
 
             <div class="form-group">
                 <label for="context">Contexto: Caso o situación específica</label>
-                <textarea id="context" placeholder="Describe brevemente el caso, situación o contexto de la investigación..."></textarea>
+                <textarea id="context" placeholder="Describe detalladamente el caso, situación o contexto de la investigación, incluyendo:
+- Información disponible (datos, documentos, testimonios)
+- Cronología de eventos conocidos
+- Personas, entidades o activos involucrados
+- Objetivos prioritarios de la investigación
+- Hipótesis iniciales a verificar"></textarea>
             </div>
 
             <div class="form-group">
@@ -48,15 +63,21 @@
                     <option value="Investigación corporativa">Investigación corporativa</option>
                     <option value="Verificación de información/fake news">Verificación de información/fake news</option>
                     <option value="Análisis forense digital">Análisis forense digital</option>
+                    <option value="Análisis forense animal">Análisis forense animal</option>
+                    <option value="Análisis forense medioambiental">Análisis forense medioambiental</option>
                     <option value="Investigación de fraudes">Investigación de fraudes</option>
                     <option value="Due diligence empresarial">Due diligence empresarial</option>
                     <option value="Investigación de antecedentes">Investigación de antecedentes</option>
-                    <option value="Análisis de riesgos">Análisis de riesgos</option>
-                    <option value="Investigación académica criminológica">Investigación académica criminológica</option>
+                    <option value="Análisis OSINT">Análisis OSINT</option>
+                    <option value="Análisis HUMINT y fuentes humanas">Análisis HUMINT y fuentes humanas</option>
+                    <option value="Análisis de inteligencia geoespacial (GEOINT)">Análisis de inteligencia geoespacial (GEOINT)</option>
+                    <option value="Investigación e inteligencia de señales (SIGINT)">Investigación e inteligencia de señales (SIGINT)</option>
+                    <option value="Investigación documentalista">Investigación documentalista</option>
                     <option value="Recopilación de evidencias">Recopilación de evidencias</option>
                     <option value="Análisis de patrones y comportamientos">Análisis de patrones y comportamientos</option>
                     <option value="Investigación de mercado competitivo">Investigación de mercado competitivo</option>
                     <option value="Contrainteligencia">Contrainteligencia</option>
+                    <option value="Geopolítica y análisis de riesgo país">Geopolítica y análisis de riesgo país</option>
                 </select>
             </div>
 
@@ -64,21 +85,23 @@
                 <label for="format">Formato de Salida</label>
                 <select id="format" required>
                     <option value="">Seleccione un formato</option>
-                    <option value="Informe ejecutivo estructurado">Informe ejecutivo estructurado</option>
+                    <option value="Informe de investigación estructurado">Informe de investigación estructurado</option>
+                    <option value="Informe ejecutivo">Informe ejecutivo</option>
+                    <option value="Informe operacional">Informe operacional</option>
                     <option value="Cronología de eventos/timeline">Cronología de eventos/timeline</option>
                     <option value="Mapa de conexiones y relaciones">Mapa de conexiones y relaciones</option>
                     <option value="Lista de evidencias catalogadas">Lista de evidencias catalogadas</option>
                     <option value="Protocolo de investigación paso a paso">Protocolo de investigación paso a paso</option>
                     <option value="Matriz de análisis de riesgos">Matriz de análisis de riesgos</option>
                     <option value="Cuestionario de entrevista">Cuestionario de entrevista</option>
-                    <option value="Checklist de verificación">Checklist de verificación</option>
-                    <option value="Diagrama de flujo investigativo">Diagrama de flujo investigativo</option>
+                    <option value="Cuestionario de reflexiones críticas">Cuestionario de reflexiones críticas</option>
+                    <option value="Checklist de verificación de fuentes">Checklist de verificación de fuentes</option>
+                    <option value="Diagrama de flujo indagatorio">Diagrama de flujo indagatorio</option>
                     <option value="Reporte de hallazgos preliminares">Reporte de hallazgos preliminares</option>
                     <option value="Plan de seguimiento y monitoreo">Plan de seguimiento y monitoreo</option>
                     <option value="Análisis OSINT estructurado">Análisis OSINT estructurado</option>
-                    <option value="Marco legal y consideraciones éticas">Marco legal y consideraciones éticas</option>
-                    <option value="Plantilla de documentación de evidencias">Plantilla de documentación de evidencias</option>
-                    <option value="Guía de preservación de cadena de custodia">Guía de preservación de cadena de custodia</option>
+                    <option value="Análisis SIGINT estructurado">Análisis SIGINT estructurado</option>
+                    <option value="Plantillas de documentación">Plantillas de documentación</option>
                 </select>
             </div>
 
@@ -87,15 +110,35 @@
                 <select id="competency" required>
                     <option value="">Seleccione una competencia</option>
                     <option value="Pensamiento analítico y deductivo">Pensamiento analítico y deductivo</option>
-                    <option value="Investigación con fuentes abiertas (OSINT)">Investigación con fuentes abiertas (OSINT)</option>
-                    <option value="Ética profesional e integridad">Ética profesional e integridad</option>
+                    <option value="Investigación en fuentes abiertas y foros">Investigación en fuentes abiertas y foros</option>
                     <option value="Análisis forense y evidencial">Análisis forense y evidencial</option>
+                    <option value="Marco legal y ético">Marco legal y ético</option>
+                    <option value="Investigación sobre el terreno (HUMINT)">Investigación sobre el terreno (HUMINT)</option>
+                    <option value="Evaluación de hipótesis">Evaluación de hipótesis</option>
+                    <option value="Preservación de evidencias">Preservación de evidencias</option>
+                    <option value="Razonamiento crítico">Razonamiento crítico</option>
+                    <option value="Conocimiento de derecho civil, penal, laboral">Conocimiento de derecho civil, penal, laboral</option>
+                    <option value="Competencias GEOINT">Competencias GEOINT</option>
+                    <option value="Informe estructurado con timeline y vínculos">Informe estructurado con timeline y vínculos</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="style">Estilo de Investigación</label>
+                <select id="style" required>
+                    <option value="">Seleccione un estilo</option>
+                    <option value="Preciso y técnico">Preciso y técnico</option>
+                    <option value="Evidencias citables">Evidencias citables</option>
+                    <option value="Enfoque judicializable">Enfoque judicializable</option>
+                    <option value="Sincero y fiable verificando fuentes">Sincero y fiable verificando fuentes</option>
+                    <option value="Sin especulación">Sin especulación</option>
+                    <option value="Investigador experto en materia privada y pública">Investigador experto en materia privada y pública</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="restrictions">Restricciones o Criterios Adicionales</label>
-                <textarea id="restrictions" placeholder="Especifique limitaciones, consideraciones legales, plazos, recursos disponibles, etc..."></textarea>
+                <textarea id="restrictions" placeholder="Especifique limitaciones, consideraciones legales, plazos, recursos disponibles, fuentes a utilizar, restricciones éticas, etc..."></textarea>
             </div>
 
             <button type="submit" class="generate-btn">🔍 Generar Prompt Investigativo</button>
