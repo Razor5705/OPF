@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Generación de Prompts - OPF INTELLIGENCE</title>
+    
+    <script>
+        // ╔═══════════════════════════════════════════════════════════════╗
+        // ║              CONFIGURACIÓN PERSONALIZABLE DEL SISTEMA         ║
+        // ╠═══════════════════════════════════════════════════════════════╣
+        // ║  Modifica estos valores para personalizar tu sistema          ║
+        // ╚═══════════════════════════════════════════════════════════════╝
+        
+        const SYSTEM_CONFIG = {
+            // ===== IDENTIDAD DEL SISTEMA =====
+            brand: {
+                name: "INVESTIGAOPF",           // Nombre del sistema
+                shortName: "OPF",                   // Nombre corto para CLI
+                version: "10.0",                    // Versión
+                classification: "MÁXIMA",           // Nivel de clasificación
+                tagline: "Sistema Avanzado de Generación de Prompts",
+                company: "OPF Intelligence",        // Nombre de la empresa/organización
+            },
+            
+            // ===== COLORES DEL TEMA =====
+            colors: {
+                primaryBg: "#000000",               // Fondo principal
+                secondaryBg: "#0a0f1c",            // Fondo secundario
+                tertiaryBg: "#131927",             // Fondo terciario
+                accentPrimary: "#00ff88",          // Color de acento principal (verde)
+                accentSecondary: "#0088ff",        // Color de acento secundario (azul)
+                accentDanger: "#ff0040",           // Color de peligro (rojo)
+                accentWarning: "#ffaa00",          // Color de advertencia (amarillo)
+                textPrimary: "#ffffff",            // Texto principal
+                textSecondary: "#94a3b8",          // Texto secundario
+                borderColor: "#1e293b",            // Color de bordes
+            },
+            
+            // ===== CONFIGURACIÓN DEL LOGO SVG =====
+            logo: {
+    enabled: true,
+    type: "image",                      
+    size: 100,
+    animated: true,
+    imageUrl: "OPF sin fondo (2).png",  
+    textContent: "OPF",
+    subText: "INTELLIGENCE",
+},
+            
+            // ===== MÉTRICAS Y ESTADÍSTICAS =====
+            metrics: {
+                showPrecision: true,                // Mostrar precisión
+                showPromptCount: true,              // Mostrar contador de prompts
+                showQuality: true,                  // Mostrar calidad
+                showSavedTime: true,                // Mostrar tiempo ahorrado
+                defaultPrecision: 98,               // Precisión inicial (%)
+                defaultQuality: 96,                 // Calidad inicial (%)
+            },
+
+               
+            // ===== PLANTILLAS PREDEFINIDAS =====
+            // ===== PLANTILLAS PREDEFINIDAS =====
+            templates: {
+                enabled: true,
+                items: [
+                    { id: 'investigacion', icon: '🕵️', name: 'Investigación', desc: 'Análisis profundo y recopilación de evidencias' },
+                    { id: 'forense', icon: '🔍', name: 'Análisis Forense', desc: 'Examen detallado de evidencias digitales/físicas' },
+                    { id: 'inteligencia', icon: '🎯', name: 'Inteligencia', desc: 'Análisis OSINT, HUMINT y GEOINT' },
+                    { id: 'corporativa', icon: '🏢', name: 'Investigación Corporativa', desc: 'Due diligence y análisis empresarial' },
+                    { id: 'legal', icon: '⚖️', name: 'Investigación Legal', desc: 'Apoyo a litigios y procedimientos judiciales' },
+                    { id: 'fraudes', icon: '💳', name: 'Investigación de Fraudes', desc: 'Detección y análisis de actividades fraudulentas' },
+                    { id: 'digitalizacion', icon: '💻', name: 'Digitalización Oficina', desc: 'Checklist completo para modernizar la oficina' }
+                ]
+            },
+            
+            // ===== CONFIGURACIÓN DE FUNCIONALIDADES =====
+            features: {
+                showClassificationBadge: true,      // Mostrar badge de clasificación
+                showStatusBar: true,                // Mostrar barra de estado
+                enableHistory: true,                // Habilitar historial
+                maxHistoryItems: 5,                 // Máximo de items en historial
+                enableAnimations: true,             // Habilitar animaciones
+                enableGridBackground: true,         // Habilitar fondo con grid animado
+                enableGlowEffects: true,            // Habilitar efectos de brillo
+                autoSave: true,                     // Guardar automáticamente
+            },
+            
+            // ===== TEXTOS PERSONALIZABLES =====
+            texts: {
+                generatorTitle: "Configuración de la Investigación",
+                templatesTitle: "Tipos de Investigación",
+                metricsTitle: "Métricas Operativas",
+                outputTitle: "Prompts de Investigación Generado",
+                historyTitle: "Historial de Casos",
+                generateButton: "🎯 Generar Prompt",
+                clearButton: "🔄 Limpiar Campos",
+                exampleButton: "📝 Cargar Ejemplo",
+                copyButton: "📋 Copiar Prompt",
+                emptyOutput: "El prompt de investigación aparecerá aquí...",
+                emptyHistory: "El historial de casos aparecerá aquí después de generar prompts",
+            },
+            
+            // ===== CONFIGURACIÓN DE API Y CLI =====
+            api: {
+                enabled: true,                      // Habilitar API
+                cliPrefix: "OPF",                   // Prefijo para comandos CLI (ej: OPF.status())
+                exposeGlobal: true,                 // Exponer API globalmente
+            },
+            
+            // ===== CONFIGURACIÓN DE ROLES Y TONOS =====
+            roles: [
+                { value: 'detective', label: 'Detective Privado Senior' },
+                { value: 'analista', label: 'Analista de Inteligencia' },
+                { value: 'forense', label: 'Perito Forense Digital' },
+                { value: 'corporativo', label: 'Investigador Corporativo' },
+                { value: 'legal', label: 'Investigador Legal' },
+                { value: 'fraudes', label: 'Especialista en Fraudología' },
+                { value: 'osint', label: 'Analista OSINT' },
+                { value: 'seguridad', label: 'Especialista en Seguridad' },
+            ],
+            
+            tones: [
+                { value: 'profesional', label: 'Profesional y Formal' },
+                { value: 'confidencial', label: 'Estrictamente Confidencial' },
+                { value: 'tactico', label: 'Táctico Operativo' },
+                { value: 'analitico', label: 'Analítico y Metódico' },
+                { value: 'judicial', label: 'Judicializable' },
+                { value: 'directo', label: 'Directo y Conciso' },
+                { value: 'tecnico', label: 'Técnico Especializado' },
+            ],
+
+            digitalizacion: {
+                categorias: [
+                    'Gestión Documental y Archivos',
+                    'Sistemas de Gestión de Casos', 
+                    'Seguridad y Copias de Seguridad',
+                    'Equipamiento Tecnológico',
+                    'Herramientas de Investigación',
+                    'Automatización y Eficiencia',
+                    'Protocolos de Seguridad Cibernética'
+                ],
+                checklistBase: [
+                    "Digitalizar expedientes y archivos físicos existentes",
+                    "Implementar sistema de gestión documental con OCR",
+                    "Establecer protocolos de indexación y búsqueda",
+                    "Crear sistema de retención y destrucción documental",
+                    "Implementar un sistema de gestión de casos (CMS) centralizado",
+                    "Configurar flujos de trabajo para diferentes tipos de casos",
+                    "Establecer sistema de permisos y acceso por roles",
+                    "Automatizar recordatorios y seguimiento de plazos",
+                    "Configurar sistema de copias de seguridad automáticas 3-2-1",
+                    "Implementar cifrado de datos sensibles",
+                    "Establecer política de recuperación ante desastres",
+                    "Realizar auditorías regulares de seguridad",
+                    "Actualizar equipos informáticos y periféricos",
+                    "Implementar estación de trabajo para análisis forense",
+                    "Modernizar equipos de vigilancia y captura",
+                    "Adquirir dispositivos móviles seguros para trabajo de campo",
+                    "Usar software especializado de análisis de datos",
+                    "Implementar herramientas OSINT avanzadas",
+                    "Utilizar software de transcripción automática de audio",
+                    "Configurar herramientas de análisis de redes sociales",
+                    "Implementar sistema de seguimiento de gastos y horas",
+                    "Automatizar generación de informes y facturas",
+                    "Configurar calendario digital compartido sincronizado",
+                    "Implementar sistema de gestión de tareas colaborativas",
+                    "Establecer protocolos de seguridad cibernética básicos",
+                    "Implementar autenticación de dos factores",
+                    "Configurar VPN para acceso remoto seguro",
+                    "Establecer política de contraseñas y actualizaciones",
+                    "Realizar formación en ciberseguridad para el equipo"
+                ]
+            }
+        };
+        
+        // ===== NO MODIFICAR DEBAJO DE ESTA LÍNEA =====
+    </script>
+    
+    <style>
+        /* Variables CSS generadas dinámicamente desde la configuración */
+        :root {
+            --primary-bg: var(--config-primary-bg, #000000);
+            --secondary-bg: var(--config-secondary-bg, #0a0f1c);
+            --tertiary-bg: var(--config-tertiary-bg, #131927);
+            --accent-primary: var(--config-accent-primary, #00ff88);
+            --accent-secondary: var(--config-accent-secondary, #0088ff);
+            --accent-danger: var(--config-accent-danger, #ff0040);
+            --accent-warning: var(--config-accent-warning, #ffaa00);
+            --text-primary: var(--config-text-primary, #ffffff);
+            --text-secondary: var(--config-text-secondary, #94a3b8);
+            --border-color: var(--config-border-color, #1e293b);
+            --glass-bg: rgba(10, 15, 28, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+            background: radial-gradient(ellipse at center, var(--secondary-bg) 0%, var(--primary-bg) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Grid de fondo animado */
+        body.grid-enabled::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .system-logo {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .system-logo.animated {
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .system-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.active { background: var(--accent-primary); }
+        .status-dot.warning { background: var(--accent-warning); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .panel:hover::before {
+            opacity: 1;
+        }
+
+        .panel-header {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 8px;
+            color: var(--primary-bg);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .secondary-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .output-area {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--accent-primary);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+            position: relative;
+            margin-top: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .output-area:empty::before {
+            content: attr(data-placeholder);
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .metric-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .template-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .template-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .template-card.selected {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.15);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .history-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .history-item:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .timestamp {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .classification-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(255, 0, 64, 0.2);
+            border: 1px solid var(--accent-danger);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent-danger);
+            margin-top: 10px;
+            animation: blink 3s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Nuevos estilos para la sección de digitalización */
+        .digitalizacion-options {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid var(--accent-primary);
+        }
+
+        .digitalizacion-options.active {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .option-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-card:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .option-card.selected {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.15);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-container">
+                <div class="system-logo" id="systemLogo">
+                    <!-- Logo será generado dinámicamente -->
+                </div>
+                <div>
+                    <h1 id="systemName">Sistema</h1>
+                    <div class="subtitle" id="systemTagline">Sistema de Generación</div>
+                    <div class="classification-badge" id="classificationBadge" style="display:none;">
+                        CLASIFICACIÓN: <span id="classificationLevel"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="status-bar" id="statusBar" style="display:none;">
+                <div class="status-item">
+                    <div class="status-dot active"></div>
+                    <span>Sistema Activo</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot active"></div>
+                    <span>Prompts Cargados</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot warning"></div>
+                    <span>Precisión: <span id="statusPrecision">95%</span>+</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <!-- Panel de Configuración -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>🕵️</span>
+                    <span id="generatorTitle">Configuración de la Investigación</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="objective">Objetivo de la Investigación</label>
+                    <input type="text" id="objective" placeholder="Ej: Investigación de antecedentes, análisis forense digital, due diligence...">
+                </div>
+
+                <div class="form-group">
+                    <label for="context">Contexto del Caso</label>
+                    <textarea id="context" placeholder="Describe el caso, sujetos involucrados, cronología de eventos, información disponible..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Rol del Investigador</label>
+                    <select id="role">
+                        <!-- Opciones generadas dinámicamente -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tone">Prompt de Comunicación</label>
+                    <select id="tone">
+                        <!-- Opciones generadas dinámicamente -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="constraints">Restricciones Legales y Operativas</label>
+                    <textarea id="constraints" placeholder="Limitaciones legales, recursos disponibles, plazos, consideraciones éticas..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="examples">Evidencias y Pistas Disponibles</label>
+                    <textarea id="examples" placeholder="Documentación, testimonios, evidencias digitales, fuentes de información..."></textarea>
+                </div>
+
+                <!-- Sección específica para Digitalización -->
+                <div class="digitalizacion-options" id="digitalizacionOptions">
+                    <div class="panel-header">
+                        <span>⚙️</span>
+                        <span>Opciones de Digitalización</span>
+                    </div>
+                    <label>Tamaño de la Oficina:</label>
+                    <select id="officeSize">
+                        <option value="individual">Investigador Individual</option>
+                        <option value="pequeno">Equipo Pequeño (2-5 personas)</option>
+                        <option value="mediano">Oficina Mediana (6-15 personas)</option>
+                        <option value="grande">Oficina Grande (16+ personas)</option>
+                    </select>
+                    
+                    <label style="margin-top: 15px;">Presupuesto Disponible:</label>
+                    <select id="budget">
+                        <option value="bajo">Bajo (hasta €2,000)</option>
+                        <option value="medio">Medio (€2,000 - €10,000)</option>
+                        <option value="alto">Alto (€10,000+)</option>
+                    </select>
+                    
+                    <label style="margin-top: 15px;">Plazo de Implementación:</label>
+                    <select id="timeline">
+                        <option value="inmediato">Inmediato (0-30 días)</option>
+                        <option value="corto">Corto Plazo (1-3 meses)</option>
+                        <option value="medio">Medio Plazo (3-6 meses)</option>
+                        <option value="largo">Largo Plazo (6-12 meses)</option>
+                    </select>
+
+                    <label style="margin-top: 15px;">Categorías Prioritarias:</label>
+                    <div class="options-grid" id="categoriasGrid">
+                        <!-- Categorías generadas dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="generatePrompt()" id="generateBtn">🎯 Generar Prompt</button>
+                    <button class="secondary-btn" onclick="clearForm()" id="clearBtn">🔄 Limpiar Campos</button>
+                    <button class="secondary-btn" onclick="loadExample()" id="exampleBtn">📝 Cargar Ejemplo</button>
+                </div>
+            </div>
+
+            <!-- Panel de Plantillas -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>📚</span>
+                    <span id="templatesTitle">Plantillas Rápidas</span>
+                </div>
+
+                <div class="templates-grid" id="templates">
+                    <!-- Plantillas generadas dinámicamente -->
+                </div>
+
+                <div class="panel-header" style="margin-top: 30px;">
+                    <span>📈</span>
+                    <span id="metricsTitle">Métricas Operativas</span>
+                </div>
+
+                <div class="metrics" id="metricsContainer">
+                    <!-- Métricas generadas dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Salida -->
+        <div class="panel">
+            <div class="panel-header">
+                <span>📤</span>
+                <span id="outputTitle">Prompt de Investigación Generado</span>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 15px; color: var(--accent-primary);" id="loadingText">Generando prompt optimizado...</p>
+            </div>
+
+            <div class="output-area" id="output" data-placeholder="">
+            </div>
+        </div>
+
+        <!-- Panel de Historial -->
+        <div class="panel" style="margin-top: 30px;" id="historyPanel">
+            <div class="panel-header">
+                <span>📜</span>
+                <span id="historyTitle">Historial</span>
+            </div>
+
+            <div id="history">
+                <p style="color: var(--text-secondary); text-align: center; padding: 20px;" id="emptyHistoryText">
+                    El historial aparecerá aquí
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== APLICAR CONFIGURACIÓN ==========
+        function applyConfiguration() {
+            const config = SYSTEM_CONFIG;
+            
+            // Aplicar colores CSS
+            const root = document.documentElement;
+            Object.entries(config.colors).forEach(([key, value]) => {
+                const cssVarName = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+                root.style.setProperty(`--config-${cssVarName}`, value);
+            });
+            
+            // Aplicar textos
+            document.title = `${config.brand.name} - ${config.brand.tagline}`;
+            document.getElementById('systemName').textContent = config.brand.name;
+            document.getElementById('systemTagline').textContent = config.brand.tagline;
+            
+            // Aplicar badge de clasificación
+            if (config.features.showClassificationBadge && config.brand.classification) {
+                document.getElementById('classificationBadge').style.display = 'inline-block';
+                document.getElementById('classificationLevel').textContent = config.brand.classification;
+            }
+            
+            // Mostrar barra de estado
+            if (config.features.showStatusBar) {
+                document.getElementById('statusBar').style.display = 'flex';
+            }
+            
+            // Aplicar grid de fondo
+            if (config.features.enableGridBackground) {
+                document.body.classList.add('grid-enabled');
+            }
+            
+            // Aplicar textos personalizables
+            document.getElementById('generatorTitle').textContent = config.texts.generatorTitle;
+            document.getElementById('templatesTitle').textContent = config.texts.templatesTitle;
+            document.getElementById('metricsTitle').textContent = config.texts.metricsTitle;
+            document.getElementById('outputTitle').textContent = config.texts.outputTitle;
+            document.getElementById('historyTitle').textContent = config.texts.historyTitle;
+            document.getElementById('generateBtn').textContent = config.texts.generateButton;
+            document.getElementById('clearBtn').textContent = config.texts.clearButton;
+            document.getElementById('exampleBtn').textContent = config.texts.exampleButton;
+            document.getElementById('output').setAttribute('data-placeholder', config.texts.emptyOutput);
+            document.getElementById('emptyHistoryText').textContent = config.texts.emptyHistory;
+            document.getElementById('loadingText').textContent = `${config.brand.name} generando prompt optimizado...`;
+            
+            // Ocultar historial si está deshabilitado
+            if (!config.features.enableHistory) {
+                document.getElementById('historyPanel').style.display = 'none';
+            }
+            
+            // Generar logo
+            generateLogo();
+            
+            // Generar opciones de roles y tonos
+            generateSelects();
+            
+            // Generar plantillas
+            generateTemplates();
+            
+            // Generar métricas
+            generateMetrics();
+
+             // Generar opciones de digitalización
+             generateDigitalizacionOptions();
+        }
+        
+        function generateLogo() {
+            const logoContainer = document.getElementById('systemLogo');
+            const config = SYSTEM_CONFIG.logo;
+            
+            if (!config.enabled) {
+                logoContainer.style.display = 'none';
+                return;
+            }
+            
+            if (config.animated) {
+                logoContainer.classList.add('animated');
+            }
+            
+            logoContainer.style.width = config.size + 'px';
+            logoContainer.style.height = config.size + 'px';
+            
+            if (config.type === 'image' && config.imageUrl) {
+                logoContainer.innerHTML = `<img src="${config.imageUrl}" alt="${SYSTEM_CONFIG.brand.name}" style="width:100%;height:100%;">`;
+            } else if (config.type === 'text') {
+                logoContainer.innerHTML = `
+                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-weight:bold;">
+                        <div style="font-size:24px;color:var(--accent-primary)">${config.textContent}</div>
+                        ${config.subText ? `<div style="font-size:8px;color:var(--accent-secondary)">${config.subText}</div>` : ''}
+                    </div>
+                `;
+            } else {
+                // Logo SVG por defecto
+                logoContainer.innerHTML = `
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:var(--accent-primary);stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:var(--accent-secondary);stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGradient)" stroke-width="2" opacity="0.8"/>
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="url(#logoGradient)" stroke-width="1" opacity="0.6"/>
+                        <circle cx="50" cy="50" r="35" fill="none" stroke="url(#logoGradient)" stroke-width="0.5" opacity="0.4"/>
+                        <text x="50" y="45" font-family="SF Mono, Monaco, monospace" font-size="24" font-weight="bold" text-anchor="middle" fill="url(#logoGradient)">${config.textContent}</text>
+                        <text x="50" y="60" font-family="SF Mono, Monaco, monospace" font-size="6" text-anchor="middle" fill="var(--accent-primary)" opacity="0.8">${config.subText}</text>
+                        <path d="M 15 50 L 25 50" stroke="url(#logoGradient)" stroke-width="2" opacity="0.6"/>
+                        <path d="M 75 50 L 85 50" stroke="url(#logoGradient)" stroke-width="2" opacity="0.6"/>
+                        <path d="M 50 15 L 50 25" stroke="url(#logoGradient)" stroke-width="2" opacity="0.6"/>
+                        <path d="M 50 75 L 50 85" stroke="url(#logoGradient)" stroke-width="2" opacity="0.6"/>
+                    </svg>
+                `;
+            }
+        }
+        
+        function generateSelects() {
+            const roleSelect = document.getElementById('role');
+            const toneSelect = document.getElementById('tone');
+            
+            // Generar opciones de roles
+            SYSTEM_CONFIG.roles.forEach(role => {
+                const option = document.createElement('option');
+                option.value = role.value;
+                option.textContent = role.label;
+                roleSelect.appendChild(option);
+            });
+            
+            // Generar opciones de tonos
+            SYSTEM_CONFIG.tones.forEach(tone => {
+                const option = document.createElement('option');
+                option.value = tone.value;
+                option.textContent = tone.label;
+                toneSelect.appendChild(option);
+            });
+        }
+        
+        function generateTemplates() {
+            if (!SYSTEM_CONFIG.templates.enabled) {
+                document.getElementById('templates').parentElement.style.display = 'none';
+                return;
+            }
+            
+            const templatesContainer = document.getElementById('templates');
+            templatesContainer.innerHTML = '';
+            
+            SYSTEM_CONFIG.templates.items.forEach(template => {
+                const card = document.createElement('div');
+                card.className = 'template-card';
+                card.onclick = () => selectTemplate(template.id);
+                card.innerHTML = `
+                    <strong>${template.icon} ${template.name}</strong>
+                    <p style="font-size: 0.85rem; margin-top: 5px;">${template.desc}</p>
+                `;
+                templatesContainer.appendChild(card);
+            });
+        }
+        
+        function generateMetrics() {
+            const metricsContainer = document.getElementById('metricsContainer');
+            metricsContainer.innerHTML = '';
+            
+            const metrics = [
+                { id: 'promptCount', label: 'Prompts Generados', value: '0', show: SYSTEM_CONFIG.metrics.showPromptCount },
+                { id: 'avgQuality', label: 'Calidad Promedio', value: SYSTEM_CONFIG.metrics.defaultQuality + '%', show: SYSTEM_CONFIG.metrics.showQuality },
+                { id: 'savedTime', label: 'Tiempo Ahorrado', value: '0h', show: SYSTEM_CONFIG.metrics.showSavedTime },
+                { id: 'precision', label: `Precisión ${SYSTEM_CONFIG.brand.shortName}`, value: SYSTEM_CONFIG.metrics.defaultPrecision + '%', show: SYSTEM_CONFIG.metrics.showPrecision },
+            ];
+            
+            metrics.forEach(metric => {
+                if (metric.show) {
+                    const card = document.createElement('div');
+                    card.className = 'metric-card';
+                    card.innerHTML = `
+                        <div class="metric-value" id="${metric.id}">${metric.value}</div>
+                        <div class="metric-label">${metric.label}</div>
+                    `;
+                    metricsContainer.appendChild(card);
+                }
+            });
+        }
+
+        function generateDigitalizacionOptions() {
+            const categoriasGrid = document.getElementById('categoriasGrid');
+            categoriasGrid.innerHTML = '';
+            
+            SYSTEM_CONFIG.digitalizacion.categorias.forEach((categoria, index) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.innerHTML = `
+                    <input type="checkbox" id="cat-${index}" checked>
+                    <label for="cat-${index}" style="display:inline; margin-left:8px;">${categoria}</label>
+                `;
+                categoriasGrid.appendChild(card);
+            });
+        }
+
+        // ========== SISTEMA DE GENERACIÓN DE PROMPTS ==========
+       const PromptSystem = {
+            count: 0,
+            history: [],
+            
+            templates: {
+                investigacion: {
+                    objective: `Realizar investigación exhaustiva con metodología ${SYSTEM_CONFIG.brand.name}`,
+                    context: `Caso que requiere análisis profundo, recopilación de evidencias y generación de reporte ejecutivo siguiendo protocolos ${SYSTEM_CONFIG.brand.shortName}`,
+                    role: 'detective',
+                    tone: 'profesional'
+                },
+                forense: {
+                    objective: 'Análisis forense digital y preservación de evidencias',
+                    context: `Examen detallado de dispositivos digitales, preservación de cadena de custodia y análisis forense siguiendo estándares ${SYSTEM_CONFIG.brand.shortName}`,
+                    role: 'forense',
+                    tone: 'tecnico'
+                },
+                inteligencia: {
+                    objective: 'Recopilación y análisis de inteligencia OSINT/HUMINT',
+                    context: `Operación de inteligencia que requiere análisis de fuentes abiertas, verificación de información y generación de inteligencia accionable con metodología ${SYSTEM_CONFIG.brand.shortName}`,
+                    role: 'osint',
+                    tone: 'confidencial'
+                },
+                corporativa: {
+                    objective: 'Due diligence e investigación corporativa',
+                    context: `Investigación empresarial que requiere análisis de antecedentes, verificación de información corporativa y evaluación de riesgos con estándares ${SYSTEM_CONFIG.brand.shortName}`,
+                    role: 'corporativo',
+                    tone: 'profesional'
+                },
+                legal: {
+                    objective: 'Investigación para apoyo a procedimientos legales',
+                    context: `Caso legal que requiere recopilación de evidencias, análisis de documentación y generación de reportes judicializables con metodología ${SYSTEM_CONFIG.brand.shortName}`,
+                    role: 'legal',
+                    tone: 'judicial'
+                },
+                fraudes: {
+                    objective: 'Investigación de actividades fraudulentas',
+                    context: `Análisis de patrones sospechosos, detección de fraudes y recopilación de evidencias para procedimientos legales con prompts ${SYSTEM_CONFIG.brand.shortName}`,
+                    role: 'fraudes',
+                    tone: 'analitico'
+                },
+                digitalizacion: {
+                    objective: `Plan de digitalización y modernización para oficina de investigaciones`,
+                    context: `Necesito un plan completo y personalizado para digitalizar y modernizar todos los aspectos de una oficina de detective privado, incluyendo gestión documental, sistemas tecnológicos, seguridad y herramientas de investigación`,
+                    role: 'consultor-tecnologico',
+                    tone: 'practico'
+                }
+                
+            }
+        };
+
+        function generatePrompt() {
+            const objective = document.getElementById('objective').value;
+            const context = document.getElementById('context').value;
+            const role = document.getElementById('role').value;
+            const tone = document.getElementById('tone').value;
+            const constraints = document.getElementById('constraints').value;
+            const examples = document.getElementById('examples').value;
+
+            if (!objective || !context) {
+                alert(`Por favor completa al menos el objetivo y contexto para ${SYSTEM_CONFIG.brand.name}`);
+                return;
+            }
+
+            // Mostrar loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('output').style.display = 'none';
+
+            setTimeout(() => {
+                const prompt = buildPrompt({
+                    objective, context, role, tone, constraints, examples
+                });
+
+                displayPrompt(prompt);
+                saveToHistory(prompt);
+                updateMetrics();
+
+                // Ocultar loading
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('output').style.display = 'block';
+            }, 1500);
+        }
+
+        function buildPrompt(params) {
+            const roleDesc = SYSTEM_CONFIG.roles.find(r => r.value === params.role);
+            const toneDesc = SYSTEM_CONFIG.tones.find(t => t.value === params.tone);
+
+            let prompt = `## 🕵️ PROMPT ${SYSTEM_CONFIG.brand.name} v${SYSTEM_CONFIG.brand.version}\n`;
+            if (SYSTEM_CONFIG.brand.classification) {
+                prompt += `## CLASIFICACIÓN: ${SYSTEM_CONFIG.brand.classification}\n`;
+            }
+            prompt += `\n`;
+            
+            prompt += `### 🎭 ROL Y CERTIFICACIÓN DEL INVESTIGADOR\n`;
+            prompt += `Actúa como ${roleDesc ? roleDesc.label.toLowerCase() : params.role} especializado en ${params.objective.toLowerCase()}.\n\n`;
+            
+            prompt += `### 📋 CONTEXTO OPERACIONAL DEL CASO\n`;
+            prompt += `${params.context}\n\n`;
+            
+            prompt += `### 🎯 OBJETIVO PRINCIPAL DE LA INVESTIGACIÓN\n`;
+            prompt += `${params.objective}\n\n`;
+            
+            prompt += `### 💬 PROTOCOLO DE COMUNICACIÓN Y REPORTE\n`;
+            prompt += `Mantén un protocolo ${toneDesc ? toneDesc.label.toLowerCase() : params.tone}.\n\n`;
+
+            if (params.constraints) {
+                prompt += `### ⚖️ RESTRICCIONES LEGALES Y OPERATIVAS\n`;
+                prompt += `${params.constraints}\n\n`;
+            }
+
+            if (params.examples) {
+                prompt += `### 🔍 EVIDENCIAS Y PISTAS DISPONIBLES\n`;
+                prompt += `${params.examples}\n\n`;
+            }
+
+            prompt += `### 📊 PROMPT DE INVESTIGACIÓN ESTRUCTURADO\n`;
+            prompt += `- **Fase 1**: Recopilación y preservación de evidencias\n`;
+            prompt += `- **Fase 2**: Análisis forense y verificación de información\n`;
+            prompt += `- **Fase 3**: Correlación de datos y generación de inteligencia\n`;
+            prompt += `- **Fase 4**: Elaboración de reporte ejecutivo y recomendaciones\n`;
+            prompt += `- **Fase 5**: Preservación de cadena de custodia documental\n\n`;
+
+            prompt += `### ✅ CRITERIOS DE ÉXITO OPERATIVO\n`;
+            prompt += `- **Precisión**: Datos verificables y evidencias sólidas\n`;
+            prompt += `- **Legalidad**: Cumplimiento de marco legal aplicable\n`;
+            prompt += `- **Exhaustividad**: Cobertura completa del objetivo\n`;
+            prompt += `- **Trazabilidad**: Cadena de custodia documentada\n`;
+            prompt += `- **Accionabilidad**: Recomendaciones ejecutables\n\n`;
+
+            prompt += `### 🚀 EJECUCIÓN DEL PROMPT\n`;
+            prompt += `Proceda con la investigación siguiendo los protocolos establecidos. `;
+            prompt += `Mantenga los más altos estándares de confidencialidad, legalidad y precisión forense.\n\n`;
+            
+            prompt += `---\n`;
+            prompt += `*Generado por ${SYSTEM_CONFIG.brand.name} v${SYSTEM_CONFIG.brand.version} | ${new Date().toLocaleString()}*`;
+
+            return prompt;
+        }
+
+        function buildDigitalizacionPrompt(params) {
+            const officeSize = document.getElementById('officeSize').value;
+            const budget = document.getElementById('budget').value;
+            const timeline = document.getElementById('timeline').value;
+            
+            // Obtener categorías seleccionadas
+            const selectedCategorias = [];
+            SYSTEM_CONFIG.digitalizacion.categorias.forEach((categoria, index) => {
+                if (document.getElementById(`cat-${index}`).checked) {
+                    selectedCategorias.push(categoria);
+                }
+            });
+
+            let prompt = `## 💻 PLAN DE DIGITALIZACIÓN ${SYSTEM_CONFIG.brand.name}\n`;
+            prompt += `## OFICINA DE INVESTIGACIONES PRIVADAS\n\n`;
+            
+            prompt += `### 📊 CONTEXTO Y PARÁMETROS\n`;
+            prompt += `- **Tamaño de oficina**: ${document.getElementById('officeSize').options[document.getElementById('officeSize').selectedIndex].text}\n`;
+            prompt += `- **Presupuesto**: ${document.getElementById('budget').options[document.getElementById('budget').selectedIndex].text}\n`;
+            prompt += `- **Timeline**: ${document.getElementById('timeline').options[document.getElementById('timeline').selectedIndex].text}\n`;
+            prompt += `- **Contexto específico**: ${params.context}\n\n`;
+
+            prompt += `### 🎯 OBJETIVO ESTRATÉGICO\n`;
+            prompt += `${params.objective}\n\n`;
+
+            prompt += `### ✅ CHECKLIST COMPLETO DE DIGITALIZACIÓN\n\n`;
+
+            // Agrupar items del checklist por categorías seleccionadas
+            selectedCategorias.forEach(categoria => {
+                prompt += `#### ${categoria.toUpperCase()}\n`;
+                
+                SYSTEM_CONFIG.digitalizacion.checklistBase.forEach(item => {
+                    // Asignar items a categorías (simplificado - en una implementación real sería más sofisticado)
+                    if (
+                        (categoria.includes('Documental') && (item.includes('expedientes') || item.includes('documental'))) ||
+                        (categoria.includes('Gestión de Casos') && (item.includes('gestión de casos') || item.includes('CMS'))) ||
+                        (categoria.includes('Seguridad') && (item.includes('seguridad') || item.includes('backup') || item.includes('ciberseguridad'))) ||
+                        (categoria.includes('Equipamiento') && (item.includes('equipos') || item.includes('estación de trabajo'))) ||
+                        (categoria.includes('Herramientas') && (item.includes('software') || item.includes('OSINT') || item.includes('transcripción'))) ||
+                        (categoria.includes('Automatización') && (item.includes('automatizar') || item.includes('seguimiento') || item.includes('calendario'))) ||
+                        (categoria.includes('Protocolos') && (item.includes('protocolos') || item.includes('autenticación') || item.includes('VPN')))
+                    ) {
+                        prompt += `- [ ] ${item}\n`;
+                    }
+                });
+                prompt += `\n`;
+            });
+
+            prompt += `### 🛠️ RECOMENDACIONES ESPECÍFICAS\n`;
+            prompt += `#### Para presupuesto ${budget}:\n`;
+            
+            if (budget === 'bajo') {
+                prompt += `- Enfocar en soluciones open-source y gratuitas\n`;
+                prompt += `- Priorizar digitalización documental básica\n`;
+                prompt += `- Implementar backups en la nube con servicios gratuitos\n`;
+            } else if (budget === 'medio') {
+                prompt += `- Invertir en CMS especializado para investigadores\n`;
+                prompt += `- Adquirir herramientas OSINT profesionales\n`;
+                prompt += `- Implementar soluciones de seguridad robustas\n`;
+            } else {
+                prompt += `- Sistema completo de gestión integral\n`;
+                prompt += `- Equipamiento de alta gama para análisis forense\n`;
+                prompt += `- Soluciones empresariales con soporte 24/7\n`;
+            }
+            prompt += `\n`;
+
+            prompt += `### 📅 PLAN DE IMPLEMENTACIÓN POR FASES\n`;
+            if (timeline === 'inmediato') {
+                prompt += `**Fase 1 (Días 1-7)**: Digitalización urgente de documentos críticos\n`;
+                prompt += `**Fase 2 (Días 8-15)**: Configuración de backups y seguridad básica\n`;
+                prompt += `**Fase 3 (Días 16-30)**: Implementación de herramientas esenciales\n`;
+            } else if (timeline === 'corto') {
+                prompt += `**Mes 1**: Evaluación y planificación detallada\n`;
+                prompt += `**Mes 2**: Implementación de sistemas core\n`;
+                prompt += `**Mes 3**: Optimización y formación del equipo\n`;
+            } else if (timeline === 'medio') {
+                prompt += `**Trimestre 1**: Infraestructura y sistemas básicos\n`;
+                prompt += `**Trimestre 2**: Herramientas especializadas y automatización\n`;
+                prompt += `**Trimestre 3**: Seguridad avanzada y optimización\n`;
+            } else {
+                prompt += `**Semestre 1**: Transformación digital completa\n`;
+                prompt += `**Semestre 2**: Maduración y escalamiento de sistemas\n`;
+            }
+            prompt += `\n`;
+
+            prompt += `### 💰 ESTIMACIÓN DE COSTOS\n`;
+            if (budget === 'bajo') {
+                prompt += `- **Inversión estimada**: €500 - €2,000\n`;
+                prompt += `- **Principales costos**: Software básico, almacenamiento cloud, formación\n`;
+            } else if (budget === 'medio') {
+                prompt += `- **Inversión estimada**: €2,000 - €10,000\n`;
+                prompt += `- **Principales costos**: Software profesional, hardware, consultoría\n`;
+            } else {
+                prompt += `- **Inversión estimada**: €10,000+\n`;
+                prompt += `- **Principales costos**: Sistemas enterprise, equipamiento especializado, desarrollo personalizado\n`;
+            }
+            prompt += `\n`;
+
+            prompt += `### 📈 MÉTRICAS DE ÉXITO\n`;
+            prompt += `- Reducción del 60% en tiempo de gestión documental\n`;
+            prompt += `- Incremento del 40% en capacidad de análisis\n`;
+            prompt += `- Mejora del 80% en seguridad de datos\n`;
+            prompt += `- Ahorro de 15+ horas semanales en tareas administrativas\n\n`;
+
+            prompt += `---\n`;
+            prompt += `*Plan generado por ${SYSTEM_CONFIG.brand.name} v${SYSTEM_CONFIG.brand.version} | ${new Date().toLocaleString()}*`;
+
+            return prompt;
+        }
+
+        
+
+        function displayPrompt(prompt) {
+            const outputArea = document.getElementById('output');
+            outputArea.innerHTML = `
+                <button class="copy-btn" onclick="copyPrompt()">${SYSTEM_CONFIG.texts.copyButton}</button>
+                <pre style="white-space: pre-wrap; font-family: inherit; margin: 0; line-height: 1.6;">${escapeHtml(prompt)}</pre>
+            `;
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('output').querySelector('pre').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copiado!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function clearForm() {
+            document.getElementById('objective').value = '';
+            document.getElementById('context').value = '';
+            document.getElementById('role').selectedIndex = 0;
+            document.getElementById('tone').selectedIndex = 0;
+            document.getElementById('constraints').value = '';
+            document.getElementById('examples').value = '';
+            document.getElementById('output').innerHTML = '';
+        }
+
+        function loadExample() {
+            document.getElementById('objective').value = 'Investigación de antecedentes corporativos y due diligence';
+            document.getElementById('context').value = 'Empresa de tecnología solicitando due diligence completo de potencial socio comercial. Sector: Fintech. Mercado: Internacional. Requiere verificación de antecedentes legales, financieros y reputacionales.';
+            document.getElementById('role').value = 'corporativo';
+            document.getElementById('tone').value = 'profesional';
+            document.getElementById('constraints').value = 'Cumplimiento de leyes de protección de datos. Timeline: 15 días. Recursos: Acceso limitado a bases de datos públicas. Consideraciones éticas y legales estrictas.';
+            document.getElementById('examples').value = 'Incluir análisis de registros mercantiles, verificaciones de antecedentes penales, análisis de redes sociales corporativas, y evaluación de riesgos reputacionales.';
+        }
+
+        function selectTemplate(templateName) {
+            const template = PromptSystem.templates[templateName];
+            if (template) {
+                document.getElementById('objective').value = template.objective;
+                document.getElementById('context').value = template.context;
+                document.getElementById('role').value = template.role;
+                document.getElementById('tone').value = template.tone;
+
+                // Actualizar visual
+                document.querySelectorAll('.template-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                event.currentTarget.classList.add('selected');
+            }
+        }
+
+        function saveToHistory(prompt) {
+            if (!SYSTEM_CONFIG.features.enableHistory) return;
+            
+            const historyItem = {
+                prompt: prompt,
+                timestamp: new Date(),
+                objective: document.getElementById('objective').value,
+                system: SYSTEM_CONFIG.brand.name
+            };
+
+            PromptSystem.history.unshift(historyItem);
+            if (PromptSystem.history.length > SYSTEM_CONFIG.features.maxHistoryItems) {
+                PromptSystem.history = PromptSystem.history.slice(0, SYSTEM_CONFIG.features.maxHistoryItems);
+            }
+
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            if (!SYSTEM_CONFIG.features.enableHistory) return;
+            
+            const historyContainer = document.getElementById('history');
+            if (PromptSystem.history.length === 0) {
+                historyContainer.innerHTML = `
+                    <p style="color: var(--text-secondary); text-align: center; padding: 20px;">
+                        ${SYSTEM_CONFIG.texts.emptyHistory}
+                    </p>
+                `;
+                return;
+            }
+
+            historyContainer.innerHTML = PromptSystem.history.map((item, index) => `
+                <div class="history-item" onclick="loadFromHistory(${index})">
+                    <strong>${escapeHtml(item.objective)}</strong>
+                    <div class="timestamp">${item.timestamp.toLocaleString()} | ${item.system}</div>
+                </div>
+            `).join('');
+        }
+
+        function loadFromHistory(index) {
+            const item = PromptSystem.history[index];
+            if (item) {
+                displayPrompt(item.prompt);
+            }
+        }
+
+        function updateMetrics() {
+            PromptSystem.count++;
+            
+            if (SYSTEM_CONFIG.metrics.showPromptCount) {
+                const countElement = document.getElementById('promptCount');
+                if (countElement) countElement.textContent = PromptSystem.count;
+            }
+            
+            // Simular calidad basada en completitud del formulario
+            const fields = ['objective', 'context', 'constraints', 'examples'];
+            let filledFields = 0;
+            fields.forEach(field => {
+                if (document.getElementById(field).value) filledFields++;
+            });
+            
+            if (SYSTEM_CONFIG.metrics.showQuality) {
+                const quality = 85 + (filledFields * 3);
+                const qualityElement = document.getElementById('avgQuality');
+                if (qualityElement) qualityElement.textContent = quality + '%';
+            }
+
+            // Actualizar precisión
+            if (SYSTEM_CONFIG.metrics.showPrecision) {
+                const precision = SYSTEM_CONFIG.metrics.defaultPrecision + Math.floor(Math.random() * 3);
+                const precisionElement = document.getElementById('precision');
+                if (precisionElement) precisionElement.textContent = precision + '%';
+            }
+
+            // Calcular tiempo ahorrado
+            if (SYSTEM_CONFIG.metrics.showSavedTime) {
+                const minutesSaved = PromptSystem.count * 15;
+                const hours = Math.floor(minutesSaved / 60);
+                const minutes = minutesSaved % 60;
+                const timeElement = document.getElementById('savedTime');
+                if (timeElement) {
+                    timeElement.textContent = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+                }
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ========== SISTEMA MAESTRO ==========
+        const MasterSystem = {
+            initialize: async function() {
+                console.log(`
+╔═══════════════════════════════════════════════════════════════╗
+║                    ${SYSTEM_CONFIG.brand.name.padEnd(45)} ║
+║              SISTEMA DE COMANDO Y CONTROL MAESTRO             ║
+${SYSTEM_CONFIG.brand.classification ? 
+`║                  CLASIFICACIÓN: ${SYSTEM_CONFIG.brand.classification.padEnd(30)} ║
+╠═══════════════════════════════════════════════════════════════╣` : 
+'╠═══════════════════════════════════════════════════════════════╣'}
+║  Inicializando sistemas...                                    ║
+╚═══════════════════════════════════════════════════════════════╝
+                `);
+
+                if (SYSTEM_CONFIG.api.enabled) {
+                    this.setupCLI();
+                }
+                
+                console.log(`✅ ${SYSTEM_CONFIG.brand.name} completamente operativo`);
+                return true;
+            },
+
+            setupCLI: function() {
+                const cliName = SYSTEM_CONFIG.api.cliPrefix;
+                
+                window[cliName] = {
+                    generatePrompt: () => generatePrompt(),
+                    clearForm: () => clearForm(),
+                    loadExample: () => loadExample(),
+                    getHistory: () => PromptSystem.history,
+                    getMetrics: () => ({
+                        prompts: PromptSystem.count,
+                        history: PromptSystem.history.length
+                    }),
+                    help: () => {
+                        console.log(`
+╔═══════════════════════════════════════════════════════════════╗
+║                  ${SYSTEM_CONFIG.brand.name} - COMANDOS              ║
+╠═══════════════════════════════════════════════════════════════╣
+║  ${cliName}.generatePrompt() - Generar prompt                   ║
+║  ${cliName}.clearForm()      - Limpiar formulario               ║
+║  ${cliName}.loadExample()    - Cargar ejemplo                   ║
+║  ${cliName}.getHistory()     - Ver historial                    ║
+║  ${cliName}.getMetrics()     - Ver métricas                     ║
+║  ${cliName}.help()           - Mostrar esta ayuda               ║
+╚═══════════════════════════════════════════════════════════════╝
+                        `);
+                    }
+                };
+
+                console.log(`💻 CLI configurada. Use "${cliName}.help()" para ver comandos`);
+            }
+        };
+
+        // ========== INICIALIZACIÓN ==========
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Aplicar configuración
+            applyConfiguration();
+            
+            // Inicializar sistema maestro
+            await MasterSystem.initialize();
+            
+            // Cargar datos guardados
+            if (SYSTEM_CONFIG.features.autoSave) {
+                const savedData = localStorage.getItem(`${SYSTEM_CONFIG.brand.shortName}_data`);
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    PromptSystem.count = data.count || 0;
+                    PromptSystem.history = data.history || [];
+                    updateMetrics();
+                    updateHistoryDisplay();
+                }
+            }
+
+            console.log(`🎮 ${SYSTEM_CONFIG.brand.name} v${SYSTEM_CONFIG.brand.version} - Sistema cargado completamente`);
+        });
+
+        // Guardar datos antes de cerrar
+        if (SYSTEM_CONFIG.features.autoSave) {
+            window.addEventListener('beforeunload', () => {
+                localStorage.setItem(`${SYSTEM_CONFIG.brand.shortName}_data`, JSON.stringify({
+                    count: PromptSystem.count,
+                    history: PromptSystem.history
+                }));
+            });
+        }
+
+        // Atajos de teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        generatePrompt();
+                        break;
+                    case 'l':
+                        e.preventDefault();
+                        clearForm();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
