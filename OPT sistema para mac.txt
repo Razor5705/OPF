@@ -1,0 +1,10 @@
+OPF Sistema.command (NOMBRE DEL ARCHIVO)
+
+#!/bin/bash
+# Abrir el HTML con el navegador predeterminado en macOS
+DIR="$(cd "$(dirname "$0")" && pwd)"
+open "$DIR/opf-base-template.html"
+
+EJECUCIÓN DE LA PÁGINA WEB/APP
+
+chmod +x "OPF Sistema.command"
